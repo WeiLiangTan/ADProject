@@ -9,6 +9,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.os.Build;
 
 public class UpdateDeptDetailActivity extends Activity {
@@ -49,14 +51,29 @@ public class UpdateDeptDetailActivity extends Activity {
 
 		public static final String ARG_UPDATEDEPT_NUMBER = "updateDept_number";
 
+		Spinner spinner;
+		
 		public UpdateDeptDetailFragment() {
 		}
-
+		
+		@Override
+		public void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+		}
+		
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
 			View rootView = inflater.inflate(
 					R.layout.fragment_update_dept_detail, container, false);
+			
+			String[] names = {"Alex","Bruno","Cyth","Dell","Elephant","Fragment","Jason"};
+			
+			spinner = (Spinner)rootView.findViewById(R.id.spinner1);
+			
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_dropdown_item,names);
+			spinner.setAdapter(adapter);
+			
 			return rootView;
 		}
 	}

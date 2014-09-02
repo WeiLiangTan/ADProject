@@ -88,6 +88,8 @@ public class DeptHeadMainActivity extends Activity implements
 	            fragment = new UpdateDeptDetailFragment();
 	            break;
 	    }
+	    
+	    
 	    fragmentManager.beginTransaction()
 	        .replace(R.id.container, fragment)
 	        .commit();
