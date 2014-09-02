@@ -33,5 +33,11 @@
     <string name="title_activity_retrieve_stationery">Retrieve Stationery</string>
     <string name="title_activity_disburstment_list">Disburstment List</string>
     <string name="title_activity_report_discrepancy">Report Discrepancy</string>
+    <string name="collection_point_1">Stationery Store - Administration Building (9.30am)</string>
+    <string name="collection_point_2">Management School (11.00am)</string>
+    <string name="collection_point_3">Medical School (9.30am)</string>
+    <string name="collection_point_4">Engineering School (11.00am)</string>
+    <string name="collection_point_5">Science School (9.30am)</string>
+    <string name="collection_point_6">University Hospital (11.00am)</string>
 
 </resources>
