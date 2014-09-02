@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.sa38team7ad"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="19"
+        android:targetSdkVersion="19" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name=".LoginActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".DeptHeadMainActivity"
+            android:label="@string/title_activity_dept_head_main" >
+        </activity>
+        <activity
+            android:name=".ApproveRequisitionActivity"
+            android:label="@string/title_activity_approve_requisition" >
+        </activity>
+        <activity
+            android:name=".DelegateAuthorityActivity"
+            android:label="@string/title_activity_delegate_authority" >
+        </activity>
+        <activity
+            android:name=".UpdateDeptDetailActivity"
+            android:label="@string/title_activity_update_dept_detail" >
+        </activity>
+        <activity
+            android:name=".StoreClerkMainActivity"
+            android:label="@string/title_activity_store_clerk_main" >
+        </activity>
+        <activity
+            android:name=".NavigationDrawerFragment2"
+            android:label="@string/title_activity_navigation_drawer_fragment2" >
+        </activity>
+        <activity
+            android:name=".RetrieveStationeryActivity"
+            android:label="@string/title_activity_retrieve_stationery" >
+        </activity>
+        <activity
+            android:name=".DisburstmentListActivity"
+            android:label="@string/title_activity_disburstment_list" >
+        </activity>
+        <activity
+            android:name=".ReportDiscrepancyActivity"
+            android:label="@string/title_activity_report_discrepancy" >
+        </activity>
+    </application>
+
+</manifest>

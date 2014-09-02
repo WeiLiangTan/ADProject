@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">SA38Team7AD</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_dept_head_main">DeptHeadMainActivity</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Example action</string>
+
+    <string-array name="dept_head_menu_array">
+        <item>Approve Requisition</item>
+        <item>Delegate Authority</item>
+        <item>Update Department Detail</item>
+    </string-array>
+
+    <string name="title_activity_approve_requisition">Requisition Approval</string>
+    <string name="title_activity_delegate_authority">Delegate Authority</string>
+    <string name="title_activity_update_dept_detail">Update Department Detail</string>
+    <string name="title_activity_store_clerk_main">StoreClerkMainActivity</string>
+
+    <string-array name="store_clerk_menu_array">
+        <item>Inventory Retrieval</item>
+        <item>Disbursement List</item>
+        <item>Report Discrepancy</item>
+    </string-array>
+
+    <string name="title_activity_navigation_drawer_fragment2">NavigationDrawerFragment2</string>
+    <string name="title_activity_retrieve_stationery">Retrieve Stationery</string>
+    <string name="title_activity_disburstment_list">Disburstment List</string>
+    <string name="title_activity_report_discrepancy">Report Discrepancy</string>
+
+</resources>
