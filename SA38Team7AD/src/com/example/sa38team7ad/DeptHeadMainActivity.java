@@ -30,6 +30,8 @@ public class DeptHeadMainActivity extends Activity implements
 	 * Fragment managing the behaviors, interactions and presentation of the
 	 * navigation drawer.
 	 */
+	String deptID;
+	int userID;
 	private NavigationDrawerFragment mNavigationDrawerFragment;
 
 	/**
@@ -45,9 +47,8 @@ public class DeptHeadMainActivity extends Activity implements
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_dept_head_main);
 		
-		//Bundle extras = getIntent().getExtras();
-		//if (extras == null) return;
-		//role = extras.getString("role");
+		deptID = getIntent().getExtras().getString("DeptID");
+		userID = getIntent().getExtras().getInt("UserID");
 		
 		//if (role.equals("DeptHead")){
 			menu = getResources().getStringArray(R.array.dept_head_menu_array);
