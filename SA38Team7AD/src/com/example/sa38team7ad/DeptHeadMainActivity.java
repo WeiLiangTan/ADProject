@@ -72,9 +72,12 @@ public class DeptHeadMainActivity extends Activity implements
 	    FragmentManager fragmentManager = getFragmentManager();
 	    switch(position) {
 	        case 0:
-	        	args.putInt(ApproveRequisitionFragment.ARG_APPROVEREQ_NUMBER, position);
-	        	fragment.setArguments(args);
+	        	
 	            fragment = new ApproveRequisitionFragment();
+	            args.putInt(ApproveRequisitionFragment.ARG_APPROVEREQ_NUMBER, position);
+	            args.putString("DeptID", deptID);
+	            args.putInt("UserID", userID);
+	        	fragment.setArguments(args);
 	            break;
 	            
 	        case 1:
