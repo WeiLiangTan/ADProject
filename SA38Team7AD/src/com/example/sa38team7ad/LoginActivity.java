@@ -1,18 +1,57 @@
 package com.example.sa38team7ad;
 
+import org.json.*;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.os.StrictMode.ThreadPolicy;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.*;
 
 public class LoginActivity extends Activity {
 
+	EditText email;
+	EditText password;
+	Button login;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
+		email = (EditText) findViewById(R.id.emailEditText);
+		password = (EditText) findViewById(R.id.passwordEditText);
+		login = (Button) findViewById(R.id.loginButton);
+		login.setOnClickListener(new OnClickListener() {
+			JSONObject result = new JSONObject();
+			@Override
+			public void onClick(View v) {
+				JSONObject jo = new JSONObject();
+				try {
+					jo.put("Email", email.getText().toString());
+					jo.put("Password", password.getText().toString());
+					StrictMode.setThreadPolicy(ThreadPolicy.LAX);
+					String s = JsonParser.postStream(getResources().getString(R.string.wcf_service) + "login", jo.toString());
+					result = new JSONObject(s);
+					if(!result.getBoolean("Found")){
+						Toast t = Toast.makeText(LoginActivity.this, "login failed, wrong email or password", Toast.LENGTH_LONG);
+						t.show();
+					}
+					else{
+						if(result.getString("RoleName").equals("Head")){
+							
+						}
+					}
+				} catch (JSONException e) {
+					Log.i("JSON EXCEPTION", e.getMessage());
+				}
+			}
+		});
 	}
 
 	@Override
@@ -40,14 +79,4 @@ public class LoginActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	public void click1(View v){
-		Intent i = new Intent(this, DeptHeadMainActivity.class);
-		//i.putExtra("role","DeptHead");
-		startActivity(i);
-	}
-	public void click2(View v){
-		Intent i = new Intent(this, StoreClerkMainActivity.class);
-		i.putExtra("role","StoreClerk");
-		startActivity(i);
-	}
 }
