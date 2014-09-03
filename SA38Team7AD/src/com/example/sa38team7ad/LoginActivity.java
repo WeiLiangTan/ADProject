@@ -1,18 +1,36 @@
 package com.example.sa38team7ad;
 
+import org.json.*;
+
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.*;
 
 public class LoginActivity extends Activity {
 
+	EditText email;
+	EditText password;
+	Button login;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_login);
+		email = (EditText) findViewById(R.id.emailEditText);
+		password = (EditText) findViewById(R.id.passwordEditText);
+		login = (Button) findViewById(R.id.loginButton);
+		login.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				new Login().execute();
+			}
+		});
 	}
 
 	@Override
@@ -40,14 +58,32 @@ public class LoginActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	public void click1(View v){
-		Intent i = new Intent(this, DeptHeadMainActivity.class);
-		//i.putExtra("role","DeptHead");
-		startActivity(i);
+	private class Login extends AsyncTask<Void, Void, Void>{
+		JSONObject result = new JSONObject();
+		@Override
+		protected Void doInBackground(Void... params) {
+			JSONObject jo = new JSONObject();
+			try {
+				jo.put("Email", email.getText().toString());
+				jo.put("Password", password.getText().toString());
+				String s = JsonParser.postStream(R.string.wcf_service + "login", jo.toString());
+				result = new JSONObject(s);
+			} catch (JSONException e) {
+				Log.i("JSON EXCEPTION", e.getMessage());
+			}
+			return null;
+		}
+		
+		protected Void onPostExecute(Void... params){
+			try {
+				Toast t = Toast.makeText(LoginActivity.this, result.getString("RoleName"), Toast.LENGTH_LONG);
+				t.show();
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+
 	}
-	public void click2(View v){
-		Intent i = new Intent(this, StoreClerkMainActivity.class);
-		i.putExtra("role","StoreClerk");
-		startActivity(i);
-	}
+	
 }
