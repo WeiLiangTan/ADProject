@@ -110,7 +110,7 @@ public class UpdateDeptDetailActivity extends Activity {
 			repNameTextView = (TextView)rootView.findViewById(R.id.textView2);
 			colPtTextView = (TextView)rootView.findViewById(R.id.textView4);
 			
-			spinner = (Spinner)rootView.findViewById(R.id.spinner1);
+			spinner = (Spinner)rootView.findViewById(R.id.spinner2);
 			spinner.setOnItemSelectedListener(this);
 			
 			rg = (RadioGroup)rootView.findViewById(R.id.radioGroup1);
