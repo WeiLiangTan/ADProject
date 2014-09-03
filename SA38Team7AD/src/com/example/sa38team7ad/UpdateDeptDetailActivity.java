@@ -1,16 +1,33 @@
 package com.example.sa38team7ad;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.os.StrictMode.ThreadPolicy;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 import android.os.Build;
 
 public class UpdateDeptDetailActivity extends Activity {
@@ -47,11 +64,23 @@ public class UpdateDeptDetailActivity extends Activity {
 	/**
 	 * A placeholder fragment containing a simple view.
 	 */
-	public static class UpdateDeptDetailFragment extends Fragment {
+	public static class UpdateDeptDetailFragment extends Fragment implements AdapterView.OnItemSelectedListener{
 
 		public static final String ARG_UPDATEDEPT_NUMBER = "updateDept_number";
 
+		TextView repNameTextView;
+		TextView colPtTextView;
 		Spinner spinner;
+		RadioGroup rg;
+		RadioButton r1;RadioButton r2;RadioButton r3;
+		RadioButton r4;RadioButton r5;RadioButton r6;
+		
+		List<User> employees;
+		ArrayList<CollectionPoint> collectionPoints;
+		ArrayList<String> empNames;
+		
+		String collectionPoint;
+		String representative;
 		
 		public UpdateDeptDetailFragment() {
 		}
@@ -59,6 +88,11 @@ public class UpdateDeptDetailActivity extends Activity {
 		@Override
 		public void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
+			employees = new ArrayList<User>();
+			empNames = new ArrayList<String>();
+			collectionPoints = new ArrayList<CollectionPoint>();
+			getDepartmentEmployee("comm");
+			getCollectionPoints();
 		}
 		
 		@Override
@@ -67,14 +101,131 @@ public class UpdateDeptDetailActivity extends Activity {
 			View rootView = inflater.inflate(
 					R.layout.fragment_update_dept_detail, container, false);
 			
-			String[] names = {"Alex","Bruno","Cyth","Dell","Elephant","Fragment","Jason"};
+			repNameTextView = (TextView)rootView.findViewById(R.id.textView2);
+			colPtTextView = (TextView)rootView.findViewById(R.id.textView4);
 			
 			spinner = (Spinner)rootView.findViewById(R.id.spinner1);
+			spinner.setOnItemSelectedListener(this);
 			
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_dropdown_item,names);
-			spinner.setAdapter(adapter);
+			rg = (RadioGroup)rootView.findViewById(R.id.radioGroup1);
 			
+			r1 = (RadioButton)rootView.findViewById(R.id.radioButton1);
+			r2 = (RadioButton)rootView.findViewById(R.id.radioButton2);
+			r3 = (RadioButton)rootView.findViewById(R.id.radioButton3);
+			r4 = (RadioButton)rootView.findViewById(R.id.radioButton4);
+			r5 = (RadioButton)rootView.findViewById(R.id.radioButton5);
+			r6 = (RadioButton)rootView.findViewById(R.id.radioButton6);
+			
+			rg.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+
+				@Override
+				public void onCheckedChanged(RadioGroup group, int checkedId) {
+					if (r1.isChecked()) collectionPoint = collectionPoints.get(0).get("CpID");
+					if (r2.isChecked()) collectionPoint = collectionPoints.get(1).get("CpID");
+					if (r3.isChecked()) collectionPoint = collectionPoints.get(2).get("CpID");
+					if (r4.isChecked()) collectionPoint = collectionPoints.get(3).get("CpID");
+					if (r5.isChecked()) collectionPoint = collectionPoints.get(4).get("CpID");
+					if (r6.isChecked()) collectionPoint = collectionPoints.get(5).get("CpID");
+				}});
 			return rootView;
 		}
+
+		@Override
+		public void onItemSelected(AdapterView<?> parent, View view,
+				int position, long id) {
+			// TODO Auto-generated method stub
+			TextView spinnerText = (TextView) view;
+			Toast.makeText(getActivity(), spinnerText.getText(), Toast.LENGTH_SHORT).show();
+		}
+
+		@Override
+		public void onNothingSelected(AdapterView<?> parent) {
+			// TODO Auto-generated method stub			
+		}
+
+	    public boolean getDepartmentEmployee(String deptId) {
+	        String url = "http://10.10.2.126/ad/service1.svc//GetDepartmentEmployees/"+deptId;
+	        new DownLoadDeptEmployee().execute(url);
+	        return true;
+	    }
+	    
+	    public boolean getCollectionPoints(){
+	    	String url = "http://10.10.2.126/ad/service1.svc//AllCollectionPoints";
+	    	new DownLoadCollectionPoint().execute(url);
+	    	return true;
+	    }
+	    
+	    private class DownLoadDeptEmployee extends AsyncTask<String, Void, JSONArray>{
+
+			@Override
+			protected JSONArray doInBackground(String... url) {
+				// TODO Auto-generated method stub
+				JSONArray a = JsonParser.getJSONArrayFromUrl(url[0]);
+				return a;
+			}
+			
+			protected void onPostExecute(JSONArray result){
+				try {
+					for (int i=0; i<result.length(); i++) {
+						JSONObject c = result.getJSONObject(i);
+						String isTempHead = "false";
+						if (c.getBoolean("IsTempHead") == true) isTempHead = "true";
+						employees.add(new User(c.getString("Name"), 
+	                                      c.getString("RoleName"),
+	                                      c.getString("Password"),
+	                                      c.getString("Email"),
+	                                      c.getString("Phone"),
+	                                      c.getString("DeptID"),
+	                                      isTempHead));
+						empNames.add(c.getString("Name"));
+					}
+					ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_dropdown_item,empNames);
+					spinner.setAdapter(adapter);
+				} catch (Exception e) {
+					Log.e("DownLoad Error", "Fail to download employee list" + e.toString());
+				}
+			}	
+	    }
+	    
+	    private class DownLoadCollectionPoint extends AsyncTask<String, Void, JSONArray>{
+
+			@Override
+			protected JSONArray doInBackground(String... url) {
+				// TODO Auto-generated method stub
+				JSONArray a = JsonParser.getJSONArrayFromUrl(url[0]);
+				return a;
+			}
+			protected void onPostExecute(JSONArray result){
+				try {
+					for (int i=0; i<result.length(); i++) {
+						JSONObject c = result.getJSONObject(i);
+						collectionPoints.add(new CollectionPoint(c.getString("CpID"),c.getString("CpName")));
+					}
+				} catch (Exception e) {
+					Log.e("DownLoad Error", "Fail to download collection point" + e.toString());
+				}
+			}
+	    }
+	    
+	    private class DownLoadDepartmentInfo extends AsyncTask<String, Void, JSONObject>{
+
+			@Override
+			protected JSONObject doInBackground(String... url) {
+				// TODO Auto-generated method stub
+				JSONObject a = JsonParser.getJSONFromUrl(url[0]);
+				return a;
+			}
+			protected void onPostExecute(JSONObject result){
+				try {
+					for (int i = 0; i<employees.size();i++){
+						if(employees.get(i).get("") == result.getString("RepID"));
+					}
+					repNameTextView.setText(result.getString(""));
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+	    }
 	}
 }
