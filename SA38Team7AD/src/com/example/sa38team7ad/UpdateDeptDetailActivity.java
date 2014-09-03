@@ -79,8 +79,9 @@ public class UpdateDeptDetailActivity extends Activity {
 		ArrayList<CollectionPoint> collectionPoints;
 		ArrayList<String> empNames;
 		
-		String collectionPoint;
-		User representative = null;
+		CollectionPoint collectionPoint;
+		String repName;
+		int repId;
 		
 		public UpdateDeptDetailFragment() {
 		}
@@ -93,6 +94,7 @@ public class UpdateDeptDetailActivity extends Activity {
 			collectionPoints = new ArrayList<CollectionPoint>();
 			getDepartmentEmployee("comm");
 			getCollectionPoints();
+			getDepartmentDetail("comm");
 		}
 		
 		@Override
@@ -120,12 +122,12 @@ public class UpdateDeptDetailActivity extends Activity {
 
 				@Override
 				public void onCheckedChanged(RadioGroup group, int checkedId) {
-					if (r1.isChecked()) collectionPoint = collectionPoints.get(0).get("CpID");
-					if (r2.isChecked()) collectionPoint = collectionPoints.get(1).get("CpID");
-					if (r3.isChecked()) collectionPoint = collectionPoints.get(2).get("CpID");
-					if (r4.isChecked()) collectionPoint = collectionPoints.get(3).get("CpID");
-					if (r5.isChecked()) collectionPoint = collectionPoints.get(4).get("CpID");
-					if (r6.isChecked()) collectionPoint = collectionPoints.get(5).get("CpID");
+					if (r1.isChecked()) collectionPoint = collectionPoints.get(0);
+					if (r2.isChecked()) collectionPoint = collectionPoints.get(1);
+					if (r3.isChecked()) collectionPoint = collectionPoints.get(2);
+					if (r4.isChecked()) collectionPoint = collectionPoints.get(3);
+					if (r5.isChecked()) collectionPoint = collectionPoints.get(4);
+					if (r6.isChecked()) collectionPoint = collectionPoints.get(5);
 				}});
 			return rootView;
 		}
@@ -152,6 +154,12 @@ public class UpdateDeptDetailActivity extends Activity {
 	    public boolean getCollectionPoints(){
 	    	String url = "http://10.10.2.126/ad/service1.svc//AllCollectionPoints";
 	    	new DownLoadCollectionPoint().execute(url);
+	    	return true;
+	    }
+	    
+	    public boolean getDepartmentDetail(String deptId){
+			String url = "http://10.10.2.126/ad/service1.svc//GetDepartment/"+deptId;
+			new DownLoadDepartmentInfo().execute(url);
 	    	return true;
 	    }
 	    
@@ -214,17 +222,22 @@ public class UpdateDeptDetailActivity extends Activity {
 			protected JSONObject doInBackground(String... url) {
 				// TODO Auto-generated method stub
 				JSONObject a = JsonParser.getJSONFromUrl(url[0]);
+				System.out.println("1235");
 				return a;
 			}
 			protected void onPostExecute(JSONObject result){
+				System.out.println("12345");
 				try {
-					for (int i = 0; i<employees.size();i++){
-						if(employees.get(i).get("UserId") == result.getString("RepID")){
-							representative = employees.get(i);
+					//repNameTextView.setText(representative.get("Name"));
+					
+					for (int i = 0; i<collectionPoints.size();i++){
+						if(collectionPoints.get(i).get("CpID")==result.getString("CpID")){
+							collectionPoint = collectionPoints.get(i);
 							break;
 						}
 					}
-					repNameTextView.setText(result.getString(representative.get("Name")));
+					colPtTextView.setText(collectionPoint.get("CpName"));
+					
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

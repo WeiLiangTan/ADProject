@@ -39,5 +39,10 @@
     <string name="collection_point_4">Engineering School (11.00am)</string>
     <string name="collection_point_5">Science School (9.30am)</string>
     <string name="collection_point_6">University Hospital (11.00am)</string>
+    <string name="select_rep">Select Representative :</string>
+    <string name="representative_text">Representative :</string>
+    <string name="collection_point_text">Collection Point :</string>
+    <string name="select_cp">Select Collection Point :</string>
+    <string name="save">Save</string>
 
 </resources>
