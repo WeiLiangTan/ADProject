@@ -6,6 +6,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.os.StrictMode.ThreadPolicy;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,9 +28,28 @@ public class LoginActivity extends Activity {
 		password = (EditText) findViewById(R.id.passwordEditText);
 		login = (Button) findViewById(R.id.loginButton);
 		login.setOnClickListener(new OnClickListener() {
+			JSONObject result = new JSONObject();
 			@Override
 			public void onClick(View v) {
-				new Login().execute();
+				JSONObject jo = new JSONObject();
+				try {
+					jo.put("Email", email.getText().toString());
+					jo.put("Password", password.getText().toString());
+					StrictMode.setThreadPolicy(ThreadPolicy.LAX);
+					String s = JsonParser.postStream(getResources().getString(R.string.wcf_service) + "login", jo.toString());
+					result = new JSONObject(s);
+					if(!result.getBoolean("Found")){
+						Toast t = Toast.makeText(LoginActivity.this, "login failed, wrong email or password", Toast.LENGTH_LONG);
+						t.show();
+					}
+					else{
+						if(result.getString("RoleName").equals("Head")){
+							
+						}
+					}
+				} catch (JSONException e) {
+					Log.i("JSON EXCEPTION", e.getMessage());
+				}
 			}
 		});
 	}
@@ -56,34 +77,6 @@ public class LoginActivity extends Activity {
 		}
 		
 		return super.onOptionsItemSelected(item);
-	}
-	
-	private class Login extends AsyncTask<Void, Void, Void>{
-		JSONObject result = new JSONObject();
-		@Override
-		protected Void doInBackground(Void... params) {
-			JSONObject jo = new JSONObject();
-			try {
-				jo.put("Email", email.getText().toString());
-				jo.put("Password", password.getText().toString());
-				String s = JsonParser.postStream(R.string.wcf_service + "login", jo.toString());
-				result = new JSONObject(s);
-			} catch (JSONException e) {
-				Log.i("JSON EXCEPTION", e.getMessage());
-			}
-			return null;
-		}
-		
-		protected Void onPostExecute(Void... params){
-			try {
-				Toast t = Toast.makeText(LoginActivity.this, result.getString("RoleName"), Toast.LENGTH_LONG);
-				t.show();
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-			return null;
-		}
-
 	}
 	
 }
