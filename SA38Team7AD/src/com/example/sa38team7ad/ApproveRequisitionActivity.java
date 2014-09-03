@@ -1,5 +1,7 @@
 package com.example.sa38team7ad;
 
+import org.json.*;
+
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
@@ -15,6 +17,8 @@ import android.os.Build;
 import android.os.StrictMode.ThreadPolicy;
 
 public class ApproveRequisitionActivity extends Activity {
+	
+	final static String HOST = "http://10.10.2.126/AD/Service1.svc/";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +57,7 @@ public class ApproveRequisitionActivity extends Activity {
 		public static final String ARG_APPROVEREQ_NUMBER = "approveReq_number";
 		ListView lv;
 		String deptID = "";
+		String[] values; 
 
 		public ApproveRequisitionFragment() {
 		}
@@ -70,8 +75,17 @@ public class ApproveRequisitionActivity extends Activity {
 					R.layout.fragment_approve_requisition, container, false);
 			lv = (ListView) rootView.findViewById(R.id.reqListView);
 			StrictMode.setThreadPolicy(ThreadPolicy.LAX);
-			
-			
+			JSONArray ja = JsonParser.getJSONArrayFromUrl(HOST + "Requisitions/" + deptID);
+			values = new String[ja.length()];
+			for(int i = 0; i < ja.length(); i++){
+				try {
+					values[i] = ja.getJSONObject(i).getString("ReqName") + " -- " + ja.getJSONObject(i).getString("ReqDate");
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			}
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, android.R.id.text1, values);
+			lv.setAdapter(adapter);
 			return rootView;
 		}
 	}
