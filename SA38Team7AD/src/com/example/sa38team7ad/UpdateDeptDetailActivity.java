@@ -148,7 +148,7 @@ public class UpdateDeptDetailActivity extends Activity {
 						}
 					}
 					System.out.println(deptID+" "+repId);
-					new UpdateDepartmentDetail().execute("http://10.10.2.126/ad/service1.svc//SetRep/"+deptID+"/1",
+					new UpdateDepartmentDetail().execute("http://10.10.2.126/ad/service1.svc//SetRep/"+deptID+"/"+repId,
 							"http://10.10.2.126/ad/service1.svc//SetCollectionPoint/"+deptID+"/"+collectionPoint.get("CpID"));
 					repNameTextView.setText(repName);
 					colPtTextView.setText(collectionPoint.get("CpName"));
