@@ -16,6 +16,8 @@ import android.view.View.OnClickListener;
 import android.widget.*;
 
 public class LoginActivity extends Activity {
+	
+	final static String HOST = "http://10.10.2.126/AD/Service1.svc/";
 
 	EditText email;
 	EditText password;
@@ -36,7 +38,7 @@ public class LoginActivity extends Activity {
 					jo.put("Email", email.getText().toString());
 					jo.put("Password", password.getText().toString());
 					StrictMode.setThreadPolicy(ThreadPolicy.LAX);
-					String s = JsonParser.postStream(getResources().getString(R.string.wcf_service) + "login", jo.toString());
+					String s = JsonParser.postStream(HOST + "login", jo.toString());
 					result = new JSONObject(s);
 					if(!result.getBoolean("Found")){
 						Toast t = Toast.makeText(LoginActivity.this, "login failed, wrong email or password", Toast.LENGTH_LONG);
@@ -44,7 +46,10 @@ public class LoginActivity extends Activity {
 					}
 					else{
 						if(result.getString("RoleName").equals("Head")){
-							
+							Intent i = new Intent(LoginActivity.this, DeptHeadMainActivity.class);
+							i.putExtra("DeptID", result.getString("DeptID"));
+							i.putExtra("UserID", result.getInt("UserID"));
+							startActivity(i);
 						}
 					}
 				} catch (JSONException e) {
