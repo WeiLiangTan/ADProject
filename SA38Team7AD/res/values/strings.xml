@@ -39,6 +39,5 @@
     <string name="collection_point_4">Engineering School (11.00am)</string>
     <string name="collection_point_5">Science School (9.30am)</string>
     <string name="collection_point_6">University Hospital (11.00am)</string>
-    <string name="wcf_service">http://10.10.2.126/AD/Service1.svc/</string>
 
 </resources>
