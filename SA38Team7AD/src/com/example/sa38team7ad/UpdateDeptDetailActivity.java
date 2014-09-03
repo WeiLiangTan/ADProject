@@ -135,26 +135,26 @@ public class UpdateDeptDetailActivity extends Activity {
 				}});
 			
 			updateBtn = (Button)rootView.findViewById(R.id.button1);
-//			updateBtn.setOnClickListener(new OnClickListener(){
-//
-//				@Override
-//				public void onClick(View v) {
-//					// TODO Auto-generated method stub
-//					for(int i = 0; i < employees.size();i++){
-//						if(employees.get(i).get("Name") == repName){
-//							repId = employees.get(i).get("UserId");
-//							System.out.println(repId);
-//							break;
-//						}
-//					}
-//					System.out.println(deptID+" "+repId);
-//					new UpdateDepartmentDetail().execute("http://10.10.2.126/ad/service1.svc//SetRep/"+deptID+"/"+repId,
-//							"http://10.10.2.126/ad/service1.svc//SetCollectionPoint/"+deptID+"/"+collectionPoint.get("CpID"));
-//					repNameTextView.setText(repName);
-//					colPtTextView.setText(collectionPoint.get("CpName"));
-//				}
-//				
-//			});
+			updateBtn.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					for(int i = 0; i < employees.size();i++){
+						if(employees.get(i).get("Name") == repName){
+							repId = employees.get(i).get("UserId");
+							System.out.println(repId);
+							break;
+						}
+					}
+					System.out.println(deptID+" "+repId);
+					new UpdateDepartmentDetail().execute("http://10.10.2.126/ad/service1.svc//SetRep/"+deptID+"/1",
+							"http://10.10.2.126/ad/service1.svc//SetCollectionPoint/"+deptID+"/"+collectionPoint.get("CpID"));
+					repNameTextView.setText(repName);
+					colPtTextView.setText(collectionPoint.get("CpName"));
+				}
+				
+			});
 			return rootView;
 		}
 
@@ -293,7 +293,8 @@ public class UpdateDeptDetailActivity extends Activity {
 			@Override
 			protected Void doInBackground(String... url) {
 				try{
-					JsonParser.getStream(url[0]);
+					String s = JsonParser.getStream(url[0]);
+					System.out.println(s);
 					JsonParser.getStream(url[1]);
 				} catch (Exception e) {
 					// TODO Auto-generated catch block
