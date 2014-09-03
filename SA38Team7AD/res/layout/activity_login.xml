@@ -16,7 +16,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="112dp"
         android:ems="10"
-        android:hint="Emai:" >
+        android:hint="Email:" >
 
         <requestFocus />
     </EditText>
