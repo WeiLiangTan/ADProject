@@ -19,9 +19,11 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
@@ -74,6 +76,7 @@ public class UpdateDeptDetailActivity extends Activity {
 		RadioGroup rg;
 		RadioButton r1;RadioButton r2;RadioButton r3;
 		RadioButton r4;RadioButton r5;RadioButton r6;
+		Button updateBtn;
 		
 		List<User> employees;
 		ArrayList<CollectionPoint> collectionPoints;
@@ -81,7 +84,8 @@ public class UpdateDeptDetailActivity extends Activity {
 		
 		CollectionPoint collectionPoint;
 		String repName;
-		int repId;
+		String repId;
+		String deptID = "comm";
 		
 		public UpdateDeptDetailFragment() {
 		}
@@ -92,9 +96,9 @@ public class UpdateDeptDetailActivity extends Activity {
 			employees = new ArrayList<User>();
 			empNames = new ArrayList<String>();
 			collectionPoints = new ArrayList<CollectionPoint>();
-			getDepartmentEmployee("comm");
+			getDepartmentEmployee(deptID);
 			getCollectionPoints();
-			getDepartmentDetail("comm");
+			getDepartmentDetail(deptID);
 		}
 		
 		@Override
@@ -129,6 +133,28 @@ public class UpdateDeptDetailActivity extends Activity {
 					if (r5.isChecked()) collectionPoint = collectionPoints.get(4);
 					if (r6.isChecked()) collectionPoint = collectionPoints.get(5);
 				}});
+			
+			updateBtn = (Button)rootView.findViewById(R.id.button1);
+			updateBtn.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					for(int i = 0; i < employees.size();i++){
+						if(employees.get(i).get("Name") == repName){
+							repId = employees.get(i).get("UserId");
+							System.out.println(repId);
+							break;
+						}
+					}
+					System.out.println(deptID+" "+repId);
+					new UpdateDepartmentDetail().execute("http://10.10.2.126/ad/service1.svc//SetRep/"+deptID+"/"+repId,
+							"http://10.10.2.126/ad/service1.svc//SetCollectionPoint/"+deptID+"/"+collectionPoint.get("CpID"));
+					repNameTextView.setText(repName);
+					colPtTextView.setText(collectionPoint.get("CpName"));
+				}
+				
+			});
 			return rootView;
 		}
 
@@ -138,11 +164,26 @@ public class UpdateDeptDetailActivity extends Activity {
 			// TODO Auto-generated method stub
 			TextView spinnerText = (TextView) view;
 			Toast.makeText(getActivity(), spinnerText.getText(), Toast.LENGTH_SHORT).show();
+			repName = spinnerText.getText().toString();
+			System.out.println("1. "+repName);
 		}
 
 		@Override
 		public void onNothingSelected(AdapterView<?> parent) {
 			// TODO Auto-generated method stub			
+		}
+		
+		public void updateClick(){
+			for(int i = 0; i < employees.size();i++){
+				if(employees.get(i).get("Name")==repName){
+					repId = employees.get(i).get("UserId");
+					break;
+				}
+			}
+			System.out.println(deptID+" "+repId);
+			new UpdateDepartmentDetail().execute("http://10.10.2.126/ad/service1.svc//SetRep/"+deptID+"/"+repId);
+			repNameTextView.setText(repName);
+//			"http://10.10.2.126/ad/service1.svc//SetCollectionPoint/"+deptID+"/"+collectionPoint.get("CpID")
 		}
 
 	    public boolean getDepartmentEmployee(String deptId) {
@@ -228,7 +269,9 @@ public class UpdateDeptDetailActivity extends Activity {
 			protected void onPostExecute(JSONObject result){
 				System.out.println("12345");
 				try {
-					//repNameTextView.setText(representative.get("Name"));
+					repName = result.getString("RepName");
+					repId = Integer.toString(result.getInt("RepID"));
+					repNameTextView.setText(repName);
 					
 					for (int i = 0; i<collectionPoints.size();i++){
 						if(collectionPoints.get(i).get("CpID")==result.getString("CpID")){
@@ -243,6 +286,22 @@ public class UpdateDeptDetailActivity extends Activity {
 					e.printStackTrace();
 				}
 			}
+	    }
+	    
+	    private class UpdateDepartmentDetail extends AsyncTask<String, Void, Void>{
+
+			@Override
+			protected Void doInBackground(String... url) {
+				try{
+					//JSONObject a = JsonParser.getJSONFromUrl(url[0]);
+					JsonParser.getStream(url[1]);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return null;
+			}
+	    	
 	    }
 	}
 }
