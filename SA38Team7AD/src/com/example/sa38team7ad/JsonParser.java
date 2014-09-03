@@ -98,5 +98,5 @@ public class JsonParser {
             Log.e("JSON Parser", "Error parsing array " + e.toString());
         }
         return jArray;
-    }
+    }   
 }
