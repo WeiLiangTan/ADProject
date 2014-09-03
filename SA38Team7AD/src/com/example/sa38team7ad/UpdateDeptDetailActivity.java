@@ -80,7 +80,7 @@ public class UpdateDeptDetailActivity extends Activity {
 		ArrayList<String> empNames;
 		
 		String collectionPoint;
-		String representative;
+		User representative = null;
 		
 		public UpdateDeptDetailFragment() {
 		}
@@ -170,7 +170,8 @@ public class UpdateDeptDetailActivity extends Activity {
 						JSONObject c = result.getJSONObject(i);
 						String isTempHead = "false";
 						if (c.getBoolean("IsTempHead") == true) isTempHead = "true";
-						employees.add(new User(c.getString("Name"), 
+						employees.add(new User(Integer.toString(c.getInt("UserID")),
+										  c.getString("Name"), 
 	                                      c.getString("RoleName"),
 	                                      c.getString("Password"),
 	                                      c.getString("Email"),
@@ -218,9 +219,12 @@ public class UpdateDeptDetailActivity extends Activity {
 			protected void onPostExecute(JSONObject result){
 				try {
 					for (int i = 0; i<employees.size();i++){
-						if(employees.get(i).get("") == result.getString("RepID"));
+						if(employees.get(i).get("UserId") == result.getString("RepID")){
+							representative = employees.get(i);
+							break;
+						}
 					}
-					repNameTextView.setText(result.getString(""));
+					repNameTextView.setText(result.getString(representative.get("Name")));
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
