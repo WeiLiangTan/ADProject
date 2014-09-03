@@ -4,12 +4,15 @@ import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.*;
 import android.os.Build;
+import android.os.StrictMode.ThreadPolicy;
 
 public class ApproveRequisitionActivity extends Activity {
 
@@ -48,8 +51,16 @@ public class ApproveRequisitionActivity extends Activity {
 	public static class ApproveRequisitionFragment extends Fragment {
 
 		public static final String ARG_APPROVEREQ_NUMBER = "approveReq_number";
+		ListView lv;
+		String deptID = "";
 
 		public ApproveRequisitionFragment() {
+		}
+		
+		@Override
+		public void onCreate(Bundle savedInstanceState){
+			super.onCreate(savedInstanceState);
+			deptID = getArguments().getString("DeptID");
 		}
 
 		@Override
@@ -57,6 +68,10 @@ public class ApproveRequisitionActivity extends Activity {
 				Bundle savedInstanceState) {
 			View rootView = inflater.inflate(
 					R.layout.fragment_approve_requisition, container, false);
+			lv = (ListView) rootView.findViewById(R.id.reqListView);
+			StrictMode.setThreadPolicy(ThreadPolicy.LAX);
+			
+			
 			return rootView;
 		}
 	}
