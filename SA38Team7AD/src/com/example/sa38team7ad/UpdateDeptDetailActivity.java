@@ -83,8 +83,8 @@ public class UpdateDeptDetailActivity extends Activity {
 		ArrayList<String> empNames;
 		
 		CollectionPoint collectionPoint;
-		String repName;
-		String repId;
+		private String repName;
+		private String repId;
 		String deptID = "comm";
 		
 		public UpdateDeptDetailFragment() {
@@ -148,10 +148,41 @@ public class UpdateDeptDetailActivity extends Activity {
 						}
 					}
 					System.out.println(deptID+" "+repId);
-					new UpdateDepartmentDetail().execute("http://10.10.2.126/ad/service1.svc//SetRep/"+deptID+"/"+repId,
-							"http://10.10.2.126/ad/service1.svc//SetCollectionPoint/"+deptID+"/"+collectionPoint.get("CpID"));
+					updateDetails();
+					
+				}
+
+//	            found = false;
+//	            name = "";
+//	            isTempHead = false;
+//	            roleName = "";
+//	            password = "";
+//	            email = "";
+//	            deptID = "";
+//	            userID = 0;
+				private void updateDetails() {
+					// TODO Auto-generated method stub
+			        JSONObject newRep = new JSONObject();
+			        try {
+			        	newRep.put("Found", "false");
+			        	newRep.put("Name", "");
+			        	newRep.put("IsTempHead", "false");
+			        	newRep.put("RoleName", "");
+			        	newRep.put("Password", "");
+			        	newRep.put("Email", "");
+			        	newRep.put("DeptID", deptID);
+			        	newRep.put("UserID", repId);
+			        } catch (Exception e) {
+			        }
+			        String jsonRep = newRep.toString();
+			        String result = JsonParser.postStream
+			            ("http://10.10.2.123/ad/service1.svc//SetRep", jsonRep);
+					
+					
+					//new UpdateDepartmentDetail().execute("http://10.10.2.126/ad/service1.svc//SetRep/"+deptID+"/"+repId,
+							//"http://10.10.2.126/ad/service1.svc//SetCollectionPoint/"+deptID+"/"+collectionPoint.get("CpID"));
 					repNameTextView.setText(repName);
-					colPtTextView.setText(collectionPoint.get("CpName"));
+					//colPtTextView.setText(collectionPoint.get("CpName"));
 				}
 				
 			});
@@ -172,34 +203,21 @@ public class UpdateDeptDetailActivity extends Activity {
 		public void onNothingSelected(AdapterView<?> parent) {
 			// TODO Auto-generated method stub			
 		}
-		
-		public void updateClick(){
-			for(int i = 0; i < employees.size();i++){
-				if(employees.get(i).get("Name")==repName){
-					repId = employees.get(i).get("UserId");
-					break;
-				}
-			}
-			System.out.println(deptID+" "+repId);
-			new UpdateDepartmentDetail().execute("http://10.10.2.126/ad/service1.svc//SetRep/"+deptID+"/"+repId);
-			repNameTextView.setText(repName);
-//			"http://10.10.2.126/ad/service1.svc//SetCollectionPoint/"+deptID+"/"+collectionPoint.get("CpID")
-		}
 
 	    public boolean getDepartmentEmployee(String deptId) {
-	        String url = "http://10.10.2.126/ad/service1.svc//GetDepartmentEmployees/"+deptId;
+	        String url = "http://10.10.2.123/ad/service1.svc//GetDepartmentEmployees/"+deptId;
 	        new DownLoadDeptEmployee().execute(url);
 	        return true;
 	    }
 	    
 	    public boolean getCollectionPoints(){
-	    	String url = "http://10.10.2.126/ad/service1.svc//AllCollectionPoints";
+	    	String url = "http://10.10.2.123/ad/service1.svc//AllCollectionPoints";
 	    	new DownLoadCollectionPoint().execute(url);
 	    	return true;
 	    }
 	    
 	    public boolean getDepartmentDetail(String deptId){
-			String url = "http://10.10.2.126/ad/service1.svc//GetDepartment/"+deptId;
+			String url = "http://10.10.2.123/ad/service1.svc//GetDepartment/"+deptId;
 			new DownLoadDepartmentInfo().execute(url);
 	    	return true;
 	    }
