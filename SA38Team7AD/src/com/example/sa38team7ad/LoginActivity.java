@@ -17,7 +17,7 @@ import android.widget.*;
 
 public class LoginActivity extends Activity {
 	
-	final static String HOST = "http://10.10.2.123/AD/Service1.svc/";
+	final static String HOST = "http://10.10.2.126/AD/Service1.svc/";
 
 	EditText email;
 	EditText password;
@@ -45,7 +45,7 @@ public class LoginActivity extends Activity {
 						t.show();
 					}
 					else{
-						if(result.getString("RoleName").equals("Head") || result.getBoolean("IsTempHead")){
+						if(result.getString("RoleName").equals("Head")){
 							Intent i = new Intent(LoginActivity.this, DeptHeadMainActivity.class);
 							i.putExtra("DeptID", result.getString("DeptID"));
 							i.putExtra("UserID", result.getInt("UserID"));
